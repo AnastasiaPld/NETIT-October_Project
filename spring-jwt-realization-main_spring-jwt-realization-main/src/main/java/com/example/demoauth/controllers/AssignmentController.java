@@ -4,21 +4,17 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demoauth.models.Assignment;
@@ -49,21 +45,17 @@ public class AssignmentController {
 	}
 
 	@GetMapping(value = "/{id}/assignment")
-	// @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
 	public Optional<Assignment> getAssignmentById(@PathVariable(name = "id") Long id) {
 		Optional<Assignment> assignment = assignmentService.getById(id);
 		return assignment;
 	}
 
 	@PostMapping(value = "/edit/assignment")
-	// @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
 	public Assignment addData(@RequestBody Assignment assignment) {
 		assignmentService.saveOrUpdate(assignment);
 		return assignment;
 	}
 
-	
-	@ExceptionHandler(RuntimeException.class)
 	@PatchMapping("/assignment/{id}")
 	public ResponseEntity<?> updateAssignment( @PathVariable(value = "id") Long assignmentId,
 			 @RequestBody Assignment request, Model model) throws ResourceNotFoundException {

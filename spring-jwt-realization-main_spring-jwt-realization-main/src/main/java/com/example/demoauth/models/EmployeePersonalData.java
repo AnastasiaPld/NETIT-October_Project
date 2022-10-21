@@ -40,13 +40,6 @@ public class EmployeePersonalData implements Serializable {
 	private Order order;
 
 	public EmployeePersonalData() {
-		name = "Not defined";
-		surname = "Not defined";
-		startWorkDay = "01.01.2022";
-		experience = 4;
-		salary = "3000";
-		email = "test@gmail.com";
-
 	}
 
 	public EmployeePersonalData(String name, String surname, String startWorkDay, int experience, String salary,
@@ -145,7 +138,5 @@ public class EmployeePersonalData implements Serializable {
 	public void setSchedule(EmployeeSchedule schedule) {
 		this.schedule = schedule;
 	}
-
-	
 
 }

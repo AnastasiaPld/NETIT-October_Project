@@ -2,16 +2,12 @@ package com.example.demoauth.models;
 
 import java.io.Serializable;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -29,10 +25,9 @@ public class EmployeeSchedule implements Serializable {
 	private int vacationTaken;
 	private int vacationForTheYear;
 	private int vacationLeft;
-	private String motherhood;	
-	
+	private String motherhood;
+
 	public EmployeeSchedule() {
-		
 		workDays = 5;
 		dayOff = 2;
 		sickLeave = 0;
@@ -40,24 +35,19 @@ public class EmployeeSchedule implements Serializable {
 		vacationForTheYear = 21;
 		vacationLeft = 21;
 		motherhood = "no";
-		
-
 	}
 
-	public EmployeeSchedule(Long id, int workDays, int dayOff, int sickLeave, int vacationTaken,
-			int vacationForTheYear, int vacationLeft, String motherhood) {
+	public EmployeeSchedule(Long id, int workDays, int dayOff, int sickLeave, int vacationTaken, int vacationForTheYear,
+			int vacationLeft, String motherhood) {
 		this.id = id;
 		this.workDays = workDays;
 		this.dayOff = dayOff;
 		this.sickLeave = sickLeave;
-		this.vacationTaken = vacationTaken;
+		this.vacationTaken = this.vacationTaken == 0 ? 0 : vacationForTheYear - vacationTaken;
 		this.vacationForTheYear = vacationForTheYear;
 		this.vacationLeft = vacationLeft;
 		this.motherhood = motherhood;
-		
 	}
-
-	
 
 	public Long getId() {
 		return id;
@@ -112,7 +102,9 @@ public class EmployeeSchedule implements Serializable {
 	}
 
 	public void setVacationLeft(int vacationLeft) {
-		this.vacationLeft = vacationLeft;
+		if (this.vacationLeft != 0) {
+			this.vacationLeft = 21 - vacationTaken;
+		}
 	}
 
 	public String getMotherhood() {

@@ -31,13 +31,28 @@ public class EmployeeDataRepositoryTest extends EmployeeDataService {
 				"startWorkDayTest", 1, "salaryTest", "emailTest", assignment, schedule, order);
 		Mockito.when(employeeService.save(any())).thenReturn(employeeTest);
 
-		employeeService.saveOrUpdate(employeeTest);
+		employeeService.save(employeeTest);
 
 		Mockito.when(employeeService.findByName(any())).thenReturn(employeeTest);
 		EmployeePersonalData employeeReturned = employeeService.findByName("employeeNameTest");
 
 		Assertions.assertNotNull(employeeReturned);
 		Assertions.assertTrue(employeeTest.equals(employeeReturned));
+		
+		//update data of created employee
+		EmployeePersonalData employeeTestUpdate = new EmployeePersonalData("employeeNameUpdateTest", "surnameUpdateTest",
+				"startWorkDayTest", 1, "salaryTest", "emailTest", assignment, schedule, order);
+		Mockito.when(employeeService.save(any())).thenReturn(employeeTestUpdate);
+
+		employeeService.save(employeeTestUpdate);
+
+		Mockito.when(employeeService.findByName(any())).thenReturn(employeeTestUpdate);
+		EmployeePersonalData employeeReturnedUpdate = employeeService.findByName("employeeNameUpdateTest");
+
+		Assertions.assertNotNull(employeeReturnedUpdate);
+		Assertions.assertTrue(employeeTestUpdate.equals(employeeReturnedUpdate));
+		
+	
 	}
 
 }

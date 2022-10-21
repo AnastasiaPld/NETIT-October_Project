@@ -14,17 +14,12 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.example.demoauth.configs.jwt.AuthEntryPointJwt;
 import com.example.demoauth.configs.jwt.AuthTokenFilter;
 import com.example.demoauth.configs.jwt.CustomAuthenticationSuccessHandler;
-import com.example.demoauth.models.User;
 import com.example.demoauth.service.UserDetailsServiceImpl;
 
 @EnableWebSecurity

@@ -6,8 +6,6 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -23,8 +21,6 @@ import com.example.demoauth.models.Order;
 import com.example.demoauth.pojo.MessageResponse;
 import com.example.demoauth.service.OrderService;
 
-
-
 @RestController
 @RequestMapping("/api/employee/data")
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -34,42 +30,43 @@ public class OrderController {
 	OrderService orderService;
 
 	@GetMapping("/all/orders")
-	public List<Order> getAllemployeesAssignment(Model model) {
+	public List<Order> getAllOrders(Model model) {
 		List<Order> all_orders = orderService.getAllData();
 		model.addAttribute("listAssignment", all_orders);
 		return all_orders;
 	}
 
 	@DeleteMapping(value = "/{id}/order")
-	public ResponseEntity<?> deleteById(@PathVariable("id") Long id) {
+	public ResponseEntity<?> deleteOrderById(@PathVariable("id") Long id) {
 		orderService.delete(id);
 		return ResponseEntity.ok(new MessageResponse("Order is deleted"));
 
 	}
 
 	@GetMapping(value = "/{id}/order")
-	// @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
-	public Optional<Order> getAssignmentById(@PathVariable(name = "id") Long id) {
+	public Optional<Order> getOrderById(@PathVariable(name = "id") Long id) {
 		Optional<Order> order = orderService.getById(id);
 		return order;
 	}
 
 	@PostMapping(value = "/edit/order")
-	// @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
-	public Order addData(@RequestBody Order order) {
+	public Order addOrder(@RequestBody Order order) {
 		orderService.saveOrUpdate(order);
 		return order;
 	}
 
 	@ExceptionHandler(RuntimeException.class)
 	@PatchMapping("/order/{id}")
-	public ResponseEntity<?> updateAssignment(BindingResult result, @PathVariable(value = "id") Long id,
+	public ResponseEntity<?> updateOrder( @PathVariable(value = "id") Long id,
 			 @RequestBody Order request, Model model) throws ResourceNotFoundException {
-		Order order = orderService.getById(id).orElseThrow(() -> new RuntimeException("Assignment not found: " + id));
+		Order order = orderService.getById(id).orElseThrow(() -> new RuntimeException("Order not found: " + id));
 
 		boolean notExist = orderService.getById(id).get() != null;
 		if (!notExist) {
-			return ResponseEntity.badRequest().body(new MessageResponse("Error: assignment not exist!"));
+			return ResponseEntity.badRequest().body(new MessageResponse("Error: order not exist!"));
+		}
+		if (request.getName() != null) {
+			order.setName(request.getName());
 		}
 
 		if (request.getDate() != null) {

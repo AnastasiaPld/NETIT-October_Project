@@ -27,22 +27,23 @@ import com.example.demoauth.service.EmployeeScheduleService;
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class EmployeeScheduleController {
 
-	@Autowired EmployeeScheduleService employeeService;
+	@Autowired
+	EmployeeScheduleService employeeService;
 	@Autowired
 	EmployeeDataRepository employeeDataRepository;
 	@Autowired
 	EmployeeScheduleRepository employeeScheduleRepository;
 
-	
 	@PostMapping(value = "/edit")
 	public EmployeeSchedule addData(@RequestBody EmployeeSchedule employeeSchedule) {
 		employeeDataRepository.findAll();
 		employeeService.saveOrUpdate(employeeSchedule);
 		return employeeSchedule;
 	}
-	
+
 	@PatchMapping(value = "/edit/{id}")
-	public ResponseEntity<EmployeeSchedule>  updateSchedule(@RequestBody EmployeeSchedule request,@PathVariable(value = "id") Long id) {
+	public ResponseEntity<EmployeeSchedule> updateSchedule(@RequestBody EmployeeSchedule request,
+			@PathVariable(value = "id") Long id) {
 		EmployeeSchedule employee = employeeService.getScheduleById(id).get();
 
 		if (request.getDayOff() != 0) {
@@ -63,15 +64,18 @@ public class EmployeeScheduleController {
 		if (request.getWorkDays() != 0) {
 			employee.setWorkDays(request.getWorkDays());
 		}
-		
 
+		if (request.getVacationLeft() != 0) {
+			employee.setVacationLeft(employee.getVacationForTheYear()-request.getVacationTaken());
+		}
+		
 		final EmployeeSchedule updatedSchedule = employeeService.save(employee);
 
 		return ResponseEntity.ok(updatedSchedule);
 	}
-	
+
 	@GetMapping("/all")
-	public List<EmployeeSchedule> getAllemployeesData(Model model) {
+	public List<EmployeeSchedule> getAllemployeesSchedule(Model model) {
 		List<EmployeeSchedule> all_employees_schedule = employeeService.getAllSchedule();
 		model.addAttribute("listUsers", all_employees_schedule);
 		return all_employees_schedule;
@@ -85,8 +89,7 @@ public class EmployeeScheduleController {
 	}
 
 	@GetMapping(value = "/{id}")
-	// @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
-	public Optional<EmployeeSchedule> getUserById(@PathVariable(name = "id") Long id) {
+	public Optional<EmployeeSchedule> getScheduleById(@PathVariable(name = "id") Long id) {
 		Optional<EmployeeSchedule> employee = employeeService.getScheduleById(id);
 		return employee;
 	}

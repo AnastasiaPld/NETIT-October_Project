@@ -18,12 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demoauth.models.EmployeePersonalData;
 import com.example.demoauth.pojo.MessageResponse;
-import com.example.demoauth.repository.EmployeeDataRepository;
-import com.example.demoauth.repository.EmployeeScheduleRepository;
 import com.example.demoauth.service.EmployeeDataService;
 import com.example.demoauth.service.EmployeeScheduleService;
-
-
 
 @RestController
 @RequestMapping("/api/employee/data")
@@ -36,51 +32,54 @@ public class EmployeeDataController {
 	@Autowired
 	EmployeeScheduleService employeeScheduleService;
 
-	@Autowired
-	EmployeeDataRepository employeeDataRepository;
-
-	@Autowired
-	EmployeeScheduleRepository employeeScheduleRepository;
-
 	@GetMapping("/all")
-	public List<EmployeePersonalData> getAllemployeesData(Model model) {
+	public List<EmployeePersonalData> getAllEmployeesData(Model model) {
 		List<EmployeePersonalData> all_employees_data = employeeDataService.getAllData();
 		model.addAttribute("listUsers", all_employees_data);
 		return all_employees_data;
 	}
 
 	@DeleteMapping(value = "/{id}")
-	public ResponseEntity<?> deleteById(@PathVariable("id") Long id) {
+	public ResponseEntity<?> deleteEmployeeById(@PathVariable("id") Long id) {
 		employeeDataService.delete(id);
 		return ResponseEntity.ok(new MessageResponse("Employee data is deleted"));
 
 	}
 
 	@GetMapping(value = "/{id}")
-	// @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
-	public Optional<EmployeePersonalData> getUserById(@PathVariable(name = "id") Long id) {
+	public Optional<EmployeePersonalData> getEmployeeById(@PathVariable(name = "id") Long id) {
 		Optional<EmployeePersonalData> employee = employeeDataService.getDataById(id);
 		return employee;
 	}
 
 	@PostMapping(value = "/edit")
-	// @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
-	public EmployeePersonalData addData(@RequestBody EmployeePersonalData employeeData) {
-		employeeDataService.saveOrUpdate(employeeData);
-		return employeeData;
-	}
+	public EmployeePersonalData addData(@RequestBody EmployeePersonalData request) {
+		if (request.getName().isEmpty()) {
+			request.setName("Not defined");
+		}
+		if (request.getSurname().isEmpty()) {
+			request.setSurname("Not defided");
+		}
+		if (request.getEmail().isEmpty()) {
+			request.setEmail("Not defined");
+		}
+		if (request.getExperience() == 0) {
+			request.setExperience(0);
+		}
+		if (request.getStartWorkDay().isEmpty()) {
+			request.setStartWorkDay("01.01.2022");
+		}
+		if (request.getSalary().isEmpty()) {
+			request.setSalary("0");
+		}
+		employeeDataService.saveOrUpdate(request);
 
-	@PostMapping(value = "/edit/data")
-	// @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
-	public EmployeePersonalData addDataAdditionally(@RequestBody EmployeePersonalData employeeData) {
-		employeeDataService.saveOrUpdate(employeeData);
-
-		return employeeData;
+		return request;
 	}
 
 	@PatchMapping("/employees/{id}")
 	public ResponseEntity<EmployeePersonalData> updateEmployee(@PathVariable(value = "id") Long employeeId,
-			 @RequestBody EmployeePersonalData request) throws ResourceNotFoundException {
+			@RequestBody EmployeePersonalData request) throws ResourceNotFoundException {
 		EmployeePersonalData employee = employeeDataService.getDataById(employeeId)
 				.orElseThrow(() -> new ResourceNotFoundException("Employee not found for this id :: " + employeeId));
 
@@ -102,7 +101,6 @@ public class EmployeeDataController {
 		if (request.getEmail() != null) {
 			employee.setEmail(request.getEmail());
 		}
-		
 
 		final EmployeePersonalData updatedEmployee = employeeDataService.update(employee, employeeId);
 

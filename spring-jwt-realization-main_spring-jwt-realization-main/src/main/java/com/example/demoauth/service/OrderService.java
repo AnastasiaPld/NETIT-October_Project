@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.demoauth.models.Order;
 import com.example.demoauth.repository.OrderRepository;
+
 @Service
 public class OrderService {
 
@@ -18,6 +19,11 @@ public class OrderService {
 	public Optional<Order> getById(Long id) {
 
 		return orderRepository.findById(id);
+	}
+
+	public Order getByOrderId(Long id) {
+
+		return orderRepository.getOne(id);
 	}
 
 	public List<Order> getAllData() {
@@ -35,6 +41,10 @@ public class OrderService {
 	}
 
 	public Order update(Order order, Long id) {
+		return orderRepository.save(order);
+	}
+
+	public Order saveOrder(Order order) {
 		return orderRepository.save(order);
 	}
 }

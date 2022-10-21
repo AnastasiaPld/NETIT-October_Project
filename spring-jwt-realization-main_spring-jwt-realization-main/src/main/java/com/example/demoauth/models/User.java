@@ -2,7 +2,6 @@ package com.example.demoauth.models;
 
 import java.io.Serializable;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -131,6 +130,5 @@ public class User  implements Serializable{
 		return "User [userId=" + userId + ", username=" + username + ", email=" + email + ", password=" + password
 				+ ", roles=" + roles + "]";
 	}
-	
-	
+		
 }

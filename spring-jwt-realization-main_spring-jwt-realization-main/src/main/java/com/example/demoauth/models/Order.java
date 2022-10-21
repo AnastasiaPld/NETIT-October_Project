@@ -2,10 +2,7 @@ package com.example.demoauth.models;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -33,16 +30,12 @@ public class Order implements Serializable {
 		name = "Books";
 	}
 
-	
-	public Order(Long id, String name, LocalDateTime date, String orderStatus, String quantity) {
-		super();
-		this.id = id;
+	public Order(String name, LocalDateTime date, String orderStatus, String quantity) {
 		this.name = name;
 		this.date = now;
 		this.orderStatus = orderStatus;
 		this.quantity = quantity;
 	}
-
 
 	public Long getId() {
 		return id;

@@ -31,7 +31,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	@Override
 	@Transactional
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		
+
 		User user = userRepository.findByUsername(username)
 				.orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username));
 		return UserDetailsImpl.build(user);
@@ -59,7 +59,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		userRepository.deleteById(id);
 		logger.info("IN delete - user with id: {} successfully deleted");
 	}
-
 
 	public void deleteByEmail(String email) {
 		userRepository.deleteByEmail(email);
